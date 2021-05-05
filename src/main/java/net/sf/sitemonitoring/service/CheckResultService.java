@@ -111,17 +111,16 @@ public class CheckResultService {
 	
 	public CheckResultDtoList getErrorTableResults(int checkId) {
 		List<CheckResult> checkResultList = checkResultRepository.findByCheckIdErrors(checkId);
-		ArrayList<CheckResultDto> list = new ArrayList<CheckResultDto>();
+		ArrayList<CheckResultDto> list = new ArrayList<>();
 		for (CheckResult checkResult : checkResultList) {
 			list.add(transformCheckToDto(checkResult));
 		}
-		CheckResultDtoList checkResultDtoList = new CheckResultDtoList(list);
-		return checkResultDtoList;
+		return new CheckResultDtoList(list);
 	}
 
 	public CheckResultDtoList getChartResults(int checkId, DatePeriod datePeriod) {
 		List<CheckResult> checkResultList = checkResultRepository.findByCheckIdDateRange(checkId, datePeriod.getDateFrom(), datePeriod.getDateTo());
-		ArrayList<CheckResultDto> list = new ArrayList<CheckResultDto>();
+		ArrayList<CheckResultDto> list = new ArrayList<>();
 		for (CheckResult checkResult : checkResultList) {
 			list.add(transformCheckToDto(checkResult));
 		}
@@ -135,20 +134,19 @@ public class CheckResultService {
 			list.add(checkResultDto);
 		}
 
-		CheckResultDtoList checkResultDtoList = new CheckResultDtoList(list);
-		return checkResultDtoList;
+		return new CheckResultDtoList(list);
 	}
 
 	public Map<Integer, CheckResultDto> getLastResults(List<Check> checks) {
-		Map<Integer, CheckResultDto> map = new HashMap<Integer, CheckResultDto>();
+		Map<Integer, CheckResultDto> map = new HashMap<>();
 		for (Check check : checks) {
 			// skip inactive checks
 			if (!check.isActive()) {
 				continue;
 			}
-			List<CheckResult> checkResultList = checkResultRepository.findByCheck(check, new PageRequest(0, 1, new Sort(Direction.DESC, "id")));
+			List<CheckResult> checkResultList = checkResultRepository.findByCheck(check, PageRequest.of(0, 1, Sort.by(Direction.DESC, "id")));
 			CheckResultDto checkResultDto = new CheckResultDto();
-			if (checkResultList.size() == 0) {
+			if (checkResultList.isEmpty()) {
 				// first time, no results yet
 			} else {
 				checkResultDto = transformCheckToDto(checkResultList.get(0));

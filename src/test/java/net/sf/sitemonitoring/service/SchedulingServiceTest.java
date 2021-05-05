@@ -11,11 +11,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
-
 import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.entity.Check.CheckState;
 import net.sf.sitemonitoring.entity.Configuration;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SchedulingServiceTest {
@@ -32,7 +31,7 @@ public class SchedulingServiceTest {
 	private CheckResultService checkResultService;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		schedulingService = new SchedulingService();
 		schedulingService.setCheckService(checkService);
 		schedulingService.setConfigurationService(configurationService);

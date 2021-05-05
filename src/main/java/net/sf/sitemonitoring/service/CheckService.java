@@ -4,12 +4,12 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +23,7 @@ import net.sf.sitemonitoring.repository.CheckRepository;
 import net.sf.sitemonitoring.repository.CredentialsRepository;
 
 @Slf4j
-@Named
+@Component
 @Transactional
 public class CheckService {
 
@@ -100,7 +100,7 @@ public class CheckService {
 
 	public void delete(int id) {
 		abort(id, "deleted");
-		checkRepository.delete(id);
+		checkRepository.deleteById(id);
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -119,17 +119,17 @@ public class CheckService {
 	}
 
 	public List<Check> findAll() {
-		return checkRepository.findAll(new Sort("id"));
+		return checkRepository.findAll(Sort.by("id"));
 	}
 
 	public List<Check> findByPageId(Integer pageId) {
 		if (pageId == null) {
-			return checkRepository.findByPageIdIsNull(new Sort("id"));
+			return checkRepository.findByPageIdIsNull(Sort.by("id"));
 		}
 		if (pageId <= 0) {
-			return checkRepository.findByPageIdIsNull(new Sort("id"));
+			return checkRepository.findByPageIdIsNull(Sort.by("id"));
 		}
-		return checkRepository.findByPageId(pageId, new Sort("id"));
+		return checkRepository.findByPageId(pageId, Sort.by("id"));
 	}
 
 	public void updateChartInterval(int checkId, IntervalType chartIntervalType, int chartIntervalValue) {
